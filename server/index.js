@@ -1,30 +1,28 @@
 // express setup
 const express = require('express');
-const app =  express();
-const PORT = 3000 || process.env.PORT;
-const path = require('path');
-// socket io setup
-const http = require('http');
-const server =  http.createServer(app);
 const socketio = require('socket.io');
-const io = socketio(server);
+const http =  require('http');
 
+//Port
+const PORT = process.env.PORT || 5000;
 
+// app router handler
+const router = require('./router')
 
-// Set the static folder
-app.use(express.static(path.join(__dirname, 'public')));
+// socket and express setup
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server)
 
+// middleware
+app.use(router)
 
-
-
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log('hello');
 
-  
+  socket.on('disconnect', () => {
+    console.log('no hello')
+  })
 })
 
-
-
-
-
-server.listen(PORT, () => console.log('hhhh'));
+server.listen(PORT, () => {console.log('hhhh')})
