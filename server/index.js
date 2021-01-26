@@ -1,21 +1,18 @@
-// express setup
+
+const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-const http =  require('http');
+const cors = require('cors');
 
-//Port
-const PORT = process.env.PORT || 5000;
 
-// app router handler
-const router = require('./router')
+const router = require('./router');
 
-// socket and express setup
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server)
+const io = socketio(server);
 
-// middleware
-app.use(router)
+app.use(cors());
+app.use(router);
 
 io.on('connection', (socket) => {
   console.log('hello');
@@ -25,4 +22,4 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(PORT, () => {console.log('hhhh')})
+server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));
